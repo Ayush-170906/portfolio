@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Colorful Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <!-- AOS CSS (Animations) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"/>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Style -->
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            color: #202040;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark {
+            background: linear-gradient(135deg, #232526 0%, #000 100%);
+            color: #eee;
+        }
+        header {
+            background: linear-gradient(90deg, #fc466b 0%, #3f5efb 100%);
+            color: #fff;
+            padding: 40px 0 16px 0;
+            text-align: center;
+            font-family: 'Montserrat', Arial, sans-serif;
+            box-shadow: 0 4px 16px rgba(63, 94, 251, 0.1);
+        }
+        header h1 { font-size: 2.6em; margin-bottom: 8px; }
+        header p { font-size: 1.3em; margin-top: 0; }
+        #dark-mode-toggle {
+            position:fixed;
+            top:18px; right:18px;
+            z-index:1000;
+            font-size:1.5em;
+            background:none;
+            border:none;
+            cursor:pointer;
+            color:#fff;
+            padding:8px;
+            border-radius:24px;
+            transition: background 0.2s;
+        }
+        #dark-mode-toggle:hover {
+            background: #33333366;
+        }
+        nav {
+            background: #fff;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(32,32,64,0.07);
+            position:sticky; top:0; z-index:500;
+        }
+        nav a {
+            color: #3f5efb;
+            padding: 14px 22px;
+            display: inline-block;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            font-size: 1.08em;
+        }
+        nav a:hover { color: #fc466b; }
+        body.dark nav, body.dark header { background: #1a1a2e; color: #fff; }
+        section {
+            padding: 36px 22px;
+            max-width: 800px;
+            margin: 34px auto;
+            background: rgba(255,255,255,0.94);
+            border-radius: 18px;
+            box-shadow: 0 6px 22px rgba(140, 64, 208, 0.12);
+        }
+        body.dark section { background: #232526e6; color: #fff; }
+        h2 {
+            color: #3f5efb;
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin-bottom: 18px;
+        }
+        body.dark h2 { color: #fc466b; }
+        /* Social Media */
+        .social {
+            margin-top: 8px;
+            margin-bottom: 14px;
+        }
+        .social a {
+            color: #3f5efb;
+            font-size: 2em;
+            margin-right: 16px;
+            transition: color 0.2s;
+        }
+        .social a:hover { color: #fc466b; }
+        /* Resume Button */
+        .resume-btn {
+            display: inline-block;
+            padding: 10px 22px;
+            margin: 12px 0;
+            background: linear-gradient(90deg, #fc466b 0%, #3f5efb 100%);
+            color: #fff; border-radius: 6px; text-decoration:none; font-weight:600;
+            transition: background 0.2s;
+        }
+        .resume-btn:hover { background: linear-gradient(90deg, #3f5efb 0%, #fc466b 100%);}
+        /* Gallery */
+        .gallery {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .gallery img {
+            width: 140px; border-radius: 11px; box-shadow:0 2px 8px #8ec5fc88; transition:transform 0.2s;
+        }
+        .gallery img:hover { transform: scale(1.13); box-shadow:0 4px 20px #fc466b44;}
+        /* Projects List */
+        ul { list-style: none; padding-left: 0; }
+        ul li {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: linear-gradient(98deg, #e0c3fc 0%, #fcf6ba 100%);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(248, 70, 107, 0.05);
+        }
+        body.dark ul li {
+            background: linear-gradient(98deg, #303550 0%, #232526 100%);
+        }
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+        .skills span {
+            background: linear-gradient(90deg, #fc466b 0%, #3f5efb 100%);
+            color: #fff;
+            padding: 9px 18px;
+            border-radius: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(63, 94, 251, 0.11);
+            font-size: 1em;
+        }
+        /* Testimonials */
+        #testimonials .testimonial {
+            background: #f7c5ff33; padding: 14px; border-radius: 10px; margin: 11px 0;
+            box-shadow: 0 2px 8px #fc466b21;
+        }
+        #testimonials .testimonial span { font-size: 0.94em; color: #8ec5fc; }
+        body.dark #testimonials .testimonial { background: #232526bd; }
+        /* Blog */
+        .blog-post {
+            background: #d3f3ff66; padding: 12px; border-radius: 9px; margin-bottom: 13px;
+            box-shadow: 0 2px 8px #8ec5fc33;
+        }
+        body.dark .blog-post { background: #1a1a2ebb; }
+        /* Chart */
+        #skills-chart { max-width: 500px; margin: 0 auto 16px auto; background:#fff; border-radius:12px;padding:11px;}
+        body.dark #skills-chart { background:#222; }
+        /* Contact Form */
+        form input, form textarea {
+            width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #8ec5fc; font-size: 1em; background: #f4f6fc; transition: border-color 0.2s;
+        }
+        form input:focus, form textarea:focus { border-color: #fc466b; outline: none; }
+        body.dark form input, body.dark form textarea { background: #24244b; color:#fff; border-color: #fc466b; }
+        form button {
+            padding: 12px 28px; background: linear-gradient(90deg, #fc466b 0%, #3f5efb 100%) !important;
+            color: #fff; border: none; border-radius: 8px; font-size: 1.15em; cursor: pointer;
+            font-family: 'Montserrat', Arial, sans-serif; box-shadow: 0 2px 8px rgba(63, 94, 251, 0.09); transition: background 0.2s;
+        }
+        form button:hover { background: linear-gradient(90deg, #3f5efb 0%, #fc466b 100%) !important; }
+        /* Animations */
+        button, nav a, .resume-btn {
+            transition: transform 0.16s, box-shadow 0.13s;
+        }
+        button:hover, nav a:hover, .resume-btn:hover {
+            transform: scale(1.07);
+            box-shadow: 0 0 18px #fc466b4d;
+        }
+        /* Responsive */
+        @media (max-width: 600px) {
+            section, .gallery {padding: 10px;}
+            .gallery img {width: 88px;}
+            nav a {padding: 8px 8px; font-size:1em;}
+            header h1 {font-size: 1.35em;}
+        }
+    </style>
+</head>
+<body>
+    <button id="dark-mode-toggle" title="Toggle Dark Mode">🌙</button>
+    <header data-aos="fade-down">
+        <h1>Your Name</h1>
+        <p>Web Developer & Designer</p>
+        <div class="social">
+          <a href="https://github.com/YOURNAME" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="https://linkedin.com/in/YOURNAME" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="https://twitter.com/YOURNAME" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        </div>
+        <a href="resume.pdf" download class="resume-btn">Download Resume</a>
+    </header>
+    <nav>
+        <a href="#about">About Me</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#blog">Blog</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <section id="about" data-aos="fade-up">
+        <h2>About Me</h2>
+        <p>Write a vibrant introduction about yourself! Share your hobbies, background, and a fun fact that makes you unique.</p>
+    </section>
+
+    <section id="projects" data-aos="fade-right">
+        <h2>Projects</h2>
+        <ul>
+            <li>
+                <strong>Portfolio Website</strong>: A personal website to showcase my skills and projects.
+            </li>
+            <li>
+                <strong>Weather App</strong>: An interactive app displaying real-time weather info with animations.
+            </li>
+            <!-- Add more projects as needed -->
+        </ul>
+    </section>
+
+    <section id="skills" data-aos="zoom-in">
+        <h2>Skills</h2>
+        <div class="skills">
+            <span>HTML</span>
+            <span>CSS</span>
+            <span>JavaScript</span>
+            <span>React</span>
+            <span>Python</span>
+            <!-- Add more skills -->
+        </div>
+        <canvas id="skills-chart" width="400" height="210"></canvas>
+    </section>
+
+    <section id="gallery" data-aos="fade-up">
+        <h2>Project Gallery</h2>
+        <div class="gallery">
+            <img src="project1.png" alt="Project 1" data-aos="zoom-in">
+            <img src="project2.png" alt="Project 2" data-aos="zoom-in">
+            <!-- Add more screenshots -->
+        </div>
+    </section>
+
+    <section id="testimonials" data-aos="fade-left">
+        <h2>Testimonials</h2>
+        <div class="testimonial">
+            <p>"Great developer!"</p>
+            <span>– Jane Doe</span>
+        </div>
+        <div class="testimonial">
+            <p>"Very creative and reliable."</p>
+            <span>– John Smith</span>
+        </div>
+    </section>
+
+    <section id="blog" data-aos="fade-up">
+        <h2>Blog</h2>
+        <div class="blog-post">
+            <h3>How I built my Portfolio</h3>
+            <p>Short description about the post...</p>
+        </div>
+        <div class="blog-post">
+            <h3>My Favorite Web Tools</h3>
+            <p>Brief thoughts or tips...</p>
+        </div>
+    </section>
+
+    <section id="contact" data-aos="fade-up">
+        <h2>Contact</h2>
+        <form id="contactForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <textarea rows="4" id="message" placeholder="Your Message" required></textarea>
+            <button type="submit">Send</button>
+        </form>
+    </section>
+
+    <!-- Animate On Scroll JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+         AOS.init();
+         // Dark mode persistent
+         const toggleBtn = document.getElementById('dark-mode-toggle');
+         toggleBtn.onclick = function() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+            toggleBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+         };
+         if (localStorage.getItem('darkMode') === 'true') {
+             document.body.classList.add('dark');
+             toggleBtn.textContent = '☀️';
+         }
+         // Chart.js skills bar
+         if(document.getElementById('skills-chart')){
+            const ctx = document.getElementById('skills-chart').getContext('2d');
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: ['HTML','CSS','JS','React','Python'],
+                datasets: [{
+                  label: 'Skill Level',
+                  data: [9,8,8,7,7],
+                  backgroundColor: [
+                    '#fc466b','#3f5efb','#21d4fd','#8ec5fc','#f7971e'
+                  ]
+                }]
+              },
+              options: {
+                scales: { y: { beginAtZero:true,max:10 } },
+                plugins: { legend: {display: false} }
+              }
+            });
+         }
+         // Contact form fetch (adjust endpoint for backend)
+         document.getElementById('contactForm')
+            .addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const message = document.getElementById('message').value;
+                const res = await fetch('http://localhost:3001/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, message })
+                });
+                const data = await res.json();
+                if (data.status === 'success') alert('Message sent!');
+                else alert('Error sending message.');
+            });
+      });
+    </script>
+</body>
+</html>
